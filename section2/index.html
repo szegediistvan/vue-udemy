@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue JS</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <section>
+            <h2>Exercise 1</h2>
+            <!-- 1) Fill the <p> below with your Name and Age - using Interpolation -->
+            <p>VueJS is pretty cool - {{ myName }} {{ getMyAge() }}</p>
+            <!-- 2) Output your age, multiplied by 3 -->
+            <p>AGE * 3 = {{ ageMultiplier(3) }}</p>
+            <!-- 3) Call a function to output a random float between 0 and 1 (Math.random()) -->
+            <p v-once>{{ vueRand() }}</p>
+            <!-- 4) Search any image on Google and output it here by binding the "src" attribute -->
+            <div>
+                <img :src="imageSrc" alt="" style="width:100px;height:100px">
+            </div>
+            <!-- 5) Pre-Populate this input with your name (set the "value" attribute) -->
+            <div>
+                <input type="text" :value="myName">
+            </div>
+        </section>
+        <section>
+            <h2>Exercise 2</h2>
+            <!-- 1) Show an alert when the Button gets clicked -->
+            <div>
+                <button v-on:click="alertMe">Show Alert</button>
+            </div>
+            <!-- 2) Listen to the "keydown" event and store the value in a data property (hint: event.target.value gives you the value) -->
+            <div>
+                <input v-on:keydown="storeData" type="text">
+                <p>{{ value }}</p>
+            </div>
+            <!-- 3) Adjust the example from 2) to only fire if the "key down" is the ENTER key -->
+            <div>
+                <input v-on:keydown.enter="storeData" type="text">
+                <p>{{ value }}</p>
+            </div>
+            <hr>
+        </section>
+        <section>
+            <h2>Exercise 3</h2>
+            <!-- 1) Show a "result" of 'not there yet' as long as "value" is not equal to 37 - you can change "value" with the buttons. Print 'done' once you did it -->
+            <div>
+                <p>Current Value: {{ val }}</p>
+                <button @click="val += 5">Add 5</button>
+                <button @click="val += 1">Add 1</button>
+                <p>{{ result }}</p>
+            </div>
+            <!-- 2) Watch for changes in the "result" and reset the "value" after 5 seconds (hint: setTimeout(..., 5000) -->
+            <div>
+                <input type="text" v-model="result">
+                <p>{{ val }}</p>
+            </div>
+        </section>
+        <section>
+            <h2>Exercise 4</h2>
+            <!-- 1) Start the Effect with the Button. The Effect should alternate the "highlight" or "shrink" class on each new setInterval tick (attach respective class to the div with id "effect" below) -->
+            <div>
+                <button @click="startEffect">Start Effect</button>
+                <div id="effect" :class="addClasses"></div>
+            </div>
+            <!-- 2) Create a couple of CSS classes and attach them via the array syntax -->
+            <div :class="[classes, {red: isRed}]">I got no class :(</div>
+            <!-- 3) Let the user enter a class (create some example classes) and attach it -->
+            <div>
+                <input type="text" v-model="backgroundClass">
+                <div :style="{ width: '100px', height: '100px'}" :class="backgroundClass"></div>
+            </div>
+            <!-- 4) Let the user enter a class and enter true/ false for another class (create some example classes) and attach the classes -->
+            <div>
+                <input type="text" v-model="userClass">
+                <input type="text" v-model="isVisible">
+                <div :class="[{visible: visible}, userClass]"></div>
+            </div>
+            <!-- 5) Repeat 3) but now with values for styles (instead of class names). Attach the respective styles.  -->
+            <div>
+                <input type="text" v-model="backgroundColor">
+                <div :style="{ width: '100px', height: '100px', backgroundColor: backgroundColor}"></div>
+            </div>
+            <!-- 6) Create a simple progress bar with setInterval and style bindings. Start it by hitting the below button. -->
+            <div>
+                <button @click="startProgress">Start Progress</button>
+                <progress max="100" :value="progressBarValue"></progress>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        section {
+            margin-bottom: 30px;
+            background: #efefef;
+            padding: 15px;
+        }
+
+        section > div {
+            margin: 20px 0;
+        }
+
+        #effect {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+        }
+
+        .highlight {
+            background-color: red;
+            width: 200px !important;
+        }
+
+        .shrink {
+            background-color: gray;
+            width: 50px !important;
+        }
+
+        .red {
+            background: red;
+        }
+        .blue {
+            background: blue;
+        }
+        .green {
+            background: green;
+        }
+        .visible {
+            display: block;
+            width: 100px;
+            height: 100px;
+        }
+
+        progress {
+            margin: 20px 0;
+            display: block;
+            height: 25px;
+            border-radius: 2px;
+            border: 1px solid #666;
+            background: #eee;
+        }
+    </style>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                classes: 'green',
+                backgroundColor: 'black',
+                backgroundClass: 'red',
+                progressBarValue: 0,
+                userClass: '',
+                isVisible: true,
+                isRed: true,
+                isShrink: true,
+                isHighlight: false,
+                myName: 'István Szegedi',
+                myAge: '32',
+                value: '',
+                val: 0,
+                resultVal: 0,
+                imageSrc: 'https://content.active.com/Assets/Active.com+Content+Site+Digital+Assets/Kids/Articles/Soccer+Tips/carousel.jpg'
+            },
+            watch: {
+                val: function () {
+                    var self = this;
+                    setTimeout(function() {
+                        self.val = 0;
+                    },5000);
+                    return self.val;
+                }
+            },
+            computed: {
+                visible: function () {
+                    return (this.isVisible === 'false' ? false : true);
+                },
+                result: function () {
+                    return this.val > 37 ? 'done' : 'not there yet';
+                },
+                addClasses: function () {
+                    return {
+                        shrink: this.isShrink,
+                        highlight: this.isHighlight
+                    }
+                }
+            },
+            methods: {
+                startProgress: function () {
+                    var self = this;
+                    if(self.progressBarValue < 100) {
+                        self.progressBarValue += 5;
+                    }
+                    self.progressWidth += 50;
+                },
+                startEffect: function() {
+                    var self = this;
+                    setInterval(function () {
+                        console.log('interval');
+                        self.isShrink = !self.isShrink;
+                        self.isHighlight = !self.isHighlight;
+                    },1000);
+                },
+                storeData: function (event) {
+                    this.value = event.target.value;
+                },
+                alertMe: function () {
+                    alert('Alert!');
+                },
+                getMyAge: function () {
+                    return '(' + this.myAge + ')';
+                },
+                ageMultiplier: function (num) {
+                    return this.myAge * num;
+                },
+                vueRand: function () {
+                    return Math.random();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
